@@ -6,10 +6,10 @@ namespace Discord.Models;
 public class GuildScheduledEvent
 {
     [JsonProperty("id")]
-    public string Id { get; set; } = null!;
+    public required string Id { get; set; }
 
     [JsonProperty("guild_id")]
-    public string GuildId { get; set; } = null!;
+    public required string GuildId { get; set; }
 
     [JsonProperty("channel_id")]
     public string? ChannelId { get; set; }
@@ -18,7 +18,7 @@ public class GuildScheduledEvent
     public string? CreatorId { get; set; }
 
     [JsonProperty("name")]
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     [JsonProperty("description")]
     public string? Description { get; set; }
@@ -45,7 +45,7 @@ public class GuildScheduledEvent
     public GuildScheduledEventEntityMetadata? EntityMetadata { get; set; }
 
     [JsonProperty("creator")]
-    public User Creator { get; set; } = null!;
+    public required User Creator { get; set; }
 
     [JsonProperty("user_count")]
     public int? UserCount { get; set; }

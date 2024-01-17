@@ -6,16 +6,16 @@ namespace Discord.Models;
 public class AutoModerationRule
 {
     [JsonProperty("id")]
-    public string Id { get; set; } = null!;
+    public required string Id { get; set; }
 
     [JsonProperty("guild_id")]
-    public string GuildId { get; set; } = null!;
+    public required string GuildId { get; set; }
 
     [JsonProperty("name")]
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     [JsonProperty("creator_id")]
-    public string CreatorId { get; set; } = null!;
+    public required string CreatorId { get; set; }
 
     [JsonProperty("event_type")]
     public AutoModerationEventType EventType { get; set; }
@@ -24,17 +24,17 @@ public class AutoModerationRule
     public AutoModerationTriggerType TriggerType { get; set; }
 
     [JsonProperty("trigger_metadata")]
-    public AutoMorderationTriggerMetadata TriggerMetadata { get; set; }
+    public required AutoMorderationTriggerMetadata TriggerMetadata { get; set; }
 
     [JsonProperty("actions")]
-    public AutoModerationAction[] Actions { get; set; } = null!;
+    public required AutoModerationAction[] Actions { get; set; }
 
     [JsonProperty("enabled")]
     public bool Enabled { get; set; }
 
     [JsonProperty("exempt_roles")]
-    public string[] ExemptRoles { get; set; } = null!;
+    public required string[] ExemptRoles { get; set; }
 
     [JsonProperty("exempt_channels")]
-    public string[] ExemptChannels { get; set; } = null!;
+    public required string[] ExemptChannels { get; set; }
 }

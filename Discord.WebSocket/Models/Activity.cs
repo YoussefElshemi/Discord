@@ -5,7 +5,7 @@ namespace Discord.Models;
 public class Activity
 {
     [JsonProperty("name")]
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     [JsonProperty("type")]
     public int Type { get; set; }

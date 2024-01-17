@@ -5,14 +5,14 @@ namespace Discord.Models;
 public class GuildApplicationCommandPermissions
 {
     [JsonProperty("id")]
-    public string Id { get; set; } = null!;
+    public required string Id { get; set; }
 
     [JsonProperty("application_id")]
-    public string ApplicationId { get; set; } = null!;
+    public required string ApplicationId { get; set; }
 
     [JsonProperty("guild_id")]
-    public string GuildId { get; set; } = null!;
+    public required string GuildId { get; set; }
 
     [JsonProperty("permissions")]
-    public ApplicationCommandPermission[] Permissions { get; set; }
+    public required ApplicationCommandPermission[] Permissions { get; set; }
 }

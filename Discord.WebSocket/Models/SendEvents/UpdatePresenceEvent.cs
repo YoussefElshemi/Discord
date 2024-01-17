@@ -12,5 +12,5 @@ public class UpdatePresenceEvent : BaseEventDto
     }
 
     [JsonProperty("d")]
-    public UpdatePresenceData Data { get; set; } = new();
+    public required UpdatePresenceData Data { get; set; }
 }

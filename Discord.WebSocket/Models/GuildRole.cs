@@ -5,10 +5,10 @@ namespace Discord.Models;
 public class GuildRole
 {
     [JsonProperty("id")]
-    public string Id { get; set; } = null!;
+    public required string Id { get; set; }
 
     [JsonProperty("name")]
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     [JsonProperty("color")]
     public int Color { get; set; }
@@ -26,7 +26,7 @@ public class GuildRole
     public int Position { get; set; }
 
     [JsonProperty("permissions")]
-    public string Permissions { get; set; } = null!;
+    public required string Permissions { get; set; }
 
     [JsonProperty("managed")]
     public bool Managed { get; set; }
@@ -35,7 +35,7 @@ public class GuildRole
     public bool Mentionable { get; set; }
 
     [JsonProperty("tags")]
-    public RoleTag Tags { get; set; } = null!;
+    public required RoleTag Tags { get; set; }
 
     [JsonProperty("flags")]
     public int Flags { get; set; }

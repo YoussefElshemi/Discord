@@ -11,13 +11,13 @@ public class Sticker
     public string? PackId { get; set; }
 
     [JsonProperty("name")]
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     [JsonProperty("description")]
     public string? Description { get; set; }
 
     [JsonProperty("tags")]
-    public string Tags { get; set; } = null!;
+    public required string Tags { get; set; }
 
     [JsonProperty("asset")]
     public string? Asset { get; set; }

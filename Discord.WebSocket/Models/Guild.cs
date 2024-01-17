@@ -6,7 +6,7 @@ namespace Discord.Models;
 public class Guild : UnavailableGuild
 {
     [JsonProperty("name")]
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     [JsonProperty("icon")]
     public string? Icon { get; set; }
@@ -24,7 +24,7 @@ public class Guild : UnavailableGuild
     public bool? Owner { get; set; }
 
     [JsonProperty("owner_id")]
-    public string OwnerId { get; set; } = null!;
+    public required string OwnerId { get; set; }
 
     [JsonProperty("permissions")]
     public string? Permissions { get; set; }
@@ -54,13 +54,13 @@ public class Guild : UnavailableGuild
     public int ExplicitContentFilter { get; set; }
 
     [JsonProperty("roles")]
-    internal GuildRole[] InternalRoles { get; set; } = null!;
+    public required GuildRole[] InternalRoles { get; set; }
 
     [JsonProperty("emojis")]
-    public Emoji[] Emojis { get; set; } = null!;
+    public required Emoji[] Emojis { get; set; }
 
     [JsonProperty("features")]
-    public GuildFeature[] Features { get; set; } = null!;
+    public required GuildFeature[] Features { get; set; }
 
     [JsonProperty("mfa_level")]
     public int MfaLevel { get; set; }
@@ -99,7 +99,7 @@ public class Guild : UnavailableGuild
     public int? PremiumSubscriptionCount { get; set; }
 
     [JsonProperty("preferred_locale")]
-    public string PreferredLocale { get; set; } = null!;
+    public required string PreferredLocale { get; set; }
 
     [JsonProperty("public_updates_channel_id")]
     public string? PublicUpdatesChannelId { get; set; }

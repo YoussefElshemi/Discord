@@ -5,10 +5,10 @@ namespace Discord.Models.DispatchEvents;
 public class ThreadMembersUpdateEvent
 {
     [JsonProperty("id")]
-    public string Id { get; set; } = null!;
+    public required string Id { get; set; }
 
     [JsonProperty("guild_id")]
-    public string GuildId { get; set; } = null!;
+    public required string GuildId { get; set; }
 
     [JsonProperty("member_count")]
     public int MemberCount { get; set; }

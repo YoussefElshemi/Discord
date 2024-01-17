@@ -5,16 +5,16 @@ namespace Discord.Models;
 public class StageInstance
 {
     [JsonProperty("id")]
-    public string Id { get; set; } = null!;
+    public required string Id { get; set; }
 
     [JsonProperty("guild_id")]
-    public string GuildId { get; set; } = null!;
+    public required string GuildId { get; set; }
 
     [JsonProperty("channel_id")]
-    public string ChannelId { get; set; } = null!;
+    public required string ChannelId { get; set; }
 
     [JsonProperty("topic")]
-    public string Topic { get; set; } = null!;
+    public required string Topic { get; set; }
 
     [JsonProperty("privacy_level")]
     public int PrivacyLevel { get; set; }

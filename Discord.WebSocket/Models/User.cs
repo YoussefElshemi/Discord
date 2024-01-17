@@ -5,13 +5,13 @@ namespace Discord.Models;
 public class User
 {
     [JsonProperty("id")]
-    public string Id { get; set; } = null!;
+    public required string Id { get; set; }
 
     [JsonProperty("username")]
-    public string Username { get; set; } = null!;
+    public required string Username { get; set; }
 
     [JsonProperty("discriminator")]
-    public string Discriminator { get; set; } = null!;
+    public required string Discriminator { get; set; }
 
     [JsonProperty("global_name")]
     public string? GlobalName { get; set; }

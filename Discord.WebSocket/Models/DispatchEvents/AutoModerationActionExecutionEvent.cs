@@ -6,19 +6,19 @@ namespace Discord.Models.DispatchEvents;
 public class AutoModerationActionExecutionEvent
 {
     [JsonProperty("guild_id")]
-    public string GuildId { get; set; } = null!;
+    public required string GuildId { get; set; }
 
     [JsonProperty("action")]
-    public AutoModerationAction Action { get; set; } = null!;
+    public required AutoModerationAction Action { get; set; }
 
     [JsonProperty("rule_id")]
-    public string RuleId { get; set; } = null!;
+    public required string RuleId { get; set; }
 
     [JsonProperty("rule_trigger_type")]
     public AutoModerationTriggerType TriggerType { get; set; }
 
     [JsonProperty("user_id")]
-    public string UserId { get; set; } = null!;
+    public required string UserId { get; set; }
 
     [JsonProperty("channel_id")]
     public string? ChannelId { get; set; }
@@ -30,7 +30,7 @@ public class AutoModerationActionExecutionEvent
     public string? AlertSystemMessageId { get; set; }
 
     [JsonProperty("content")]
-    public string Content { get; set; } = null!;
+    public required string Content { get; set; }
 
     [JsonProperty("matched_keyword")]
     public string? MatchedKeyword { get; set; }

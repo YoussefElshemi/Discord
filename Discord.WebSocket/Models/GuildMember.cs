@@ -5,7 +5,7 @@ namespace Discord.Models;
 public class GuildMember
 {
     [JsonProperty("user")]
-    public User User { get; set; } = null!;
+    public required User User { get; set; }
 
     [JsonProperty("nick")]
     public string? Nick { get; set; }
@@ -14,7 +14,7 @@ public class GuildMember
     public string? Avatar { get; set; }
 
     [JsonProperty("roles")]
-    public string[] Roles { get; set; } = null!;
+    public required string[] Roles { get; set; }
 
     [JsonProperty("joined_at")]
     public DateTime JoinedAt { get; set; }

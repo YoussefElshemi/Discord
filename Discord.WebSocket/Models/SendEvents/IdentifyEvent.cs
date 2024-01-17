@@ -12,5 +12,5 @@ public class IdentifyEvent : BaseEventDto
     }
 
     [JsonProperty("d")]
-    public IdentifyData Data { get; set; } = new();
+    public required IdentifyData Data { get; set; }
 }

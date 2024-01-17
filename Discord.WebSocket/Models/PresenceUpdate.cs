@@ -5,17 +5,17 @@ namespace Discord.Models;
 public class PresenceUpdate
 {
     [JsonProperty("user")]
-    public User User { get; set; } = null!;
+    public required User User { get; set; }
 
     [JsonProperty("guild_id")]
-    public string GuildId { get; set; } = null!;
+    public required string GuildId { get; set; }
 
     [JsonProperty("status")]
-    public string Status { get; set; } = null!;
+    public required string Status { get; set; }
 
     [JsonProperty("activities")]
-    public Activity[] Activities { get; set; } = null!;
+    public required Activity[] Activities { get; set; }
 
     [JsonProperty("client_status")]
-    public ClientStatus ClientStatus { get; set; } = null!;
+    public required ClientStatus ClientStatus { get; set; }
 }

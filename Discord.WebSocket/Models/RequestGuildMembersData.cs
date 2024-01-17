@@ -5,7 +5,7 @@ namespace Discord.Models;
 public class RequestGuildMembersData
 {
     [JsonProperty("guild_id")]
-    public string GuildId { get; set; } = null!;
+    public required string GuildId { get; set; }
 
     [JsonProperty("query")]
     public string? Query { get; set; }

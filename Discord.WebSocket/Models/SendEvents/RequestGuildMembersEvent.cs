@@ -13,5 +13,5 @@ public class RequestGuildMembersEvent : BaseEventDto
     }
 
     [JsonProperty("d")]
-    public RequestGuildMembersData Data { get; set; } = new();
+    public required RequestGuildMembersData Data { get; set; }
 }

@@ -12,5 +12,5 @@ public class ResumeEvent : BaseEventDto
     }
 
     [JsonProperty("d")]
-    public ResumeData Data { get; set; } = new();
+    public required ResumeData Data { get; set; }
 }

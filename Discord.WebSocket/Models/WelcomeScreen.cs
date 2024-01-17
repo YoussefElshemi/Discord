@@ -5,14 +5,14 @@ namespace Discord.Models;
 public class WelcomeScreen
 {
     [JsonProperty("channel_id")]
-    public string ChannelId { get; set; } = null!;
+    public required string ChannelId { get; set; }
 
     [JsonProperty("description")]
-    public string Description { get; set; } = null!;
+    public required string Description { get; set; }
 
     [JsonProperty("emoji_id")]
-    public string EmojiId { get; set; } = null!;
+    public required string EmojiId { get; set; }
 
     [JsonProperty("emoji_name")]
-    public string EmojiName { get; set; } = null!;
+    public required string EmojiName { get; set; }
 }

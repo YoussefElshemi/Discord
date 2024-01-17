@@ -17,10 +17,10 @@ public class GuildCreateEvent : Guild
     public VoiceState[]? VoiceStates { get; set; }
 
     [JsonProperty("members")]
-    public GuildMember[]? Members { get; set; }
+    public GuildMember[]? InternalMembers { get; set; }
 
     [JsonProperty("channels")]
-    public Channel[]? Channels { get; set; }
+    public Channel[]? InternalChannels { get; set; }
 
     [JsonProperty("threads")]
     public Channel[]? Threads { get; set; }

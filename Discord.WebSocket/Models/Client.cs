@@ -184,7 +184,7 @@ public class Client
                         _firstAck = false;
                         var payload = new IdentifyEvent
                         {
-                            Data =
+                            Data = new IdentifyData
                             {
                                 Token = token
                             }
@@ -450,18 +450,18 @@ public class Client
 
                 Guilds[eventObject.Id] = eventObject;
 
-                if (eventObject.Members != null)
+                if (eventObject.InternalMembers != null)
                 {
-                    Array.ForEach(eventObject.Members, member =>
+                    Array.ForEach(eventObject.InternalMembers, member =>
                     {
                         Users[member.User.Id] = member.User;
                         Guilds[eventObject.Id].Members[member.User.Id] = member;
                     });
                 }
 
-                if (eventObject.Channels != null)
+                if (eventObject.InternalChannels != null)
                 {
-                    Array.ForEach(eventObject.Channels, channel =>
+                    Array.ForEach(eventObject.InternalChannels, channel =>
                     {
                         Channels[channel.Id] = channel;
                         Guilds[eventObject.Id].Channels[channel.Id] = channel;

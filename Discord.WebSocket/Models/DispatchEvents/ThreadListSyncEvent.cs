@@ -5,14 +5,14 @@ namespace Discord.Models.DispatchEvents;
 public class ThreadListSyncEvent
 {
     [JsonProperty("guild_id")]
-    public string GuildId { get; set; }
+    public required string GuildId { get; set; }
 
     [JsonProperty("channel_ids")]
     public string[]? ChannelIds { get; set; }
 
     [JsonProperty("threads")]
-    public Channel[] Threads { get; set; }
+    public required Channel[] Threads { get; set; }
 
     [JsonProperty("members")]
-    public ThreadMember[] Members { get; set; }
+    public required ThreadMember[] Members { get; set; }
 }

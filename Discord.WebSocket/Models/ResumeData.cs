@@ -5,10 +5,10 @@ namespace Discord.Models;
 public class ResumeData
 {
     [JsonProperty("token")]
-    public string Token { get; set; } = null!;
+    public required string Token { get; set; }
 
     [JsonProperty("session_id")]
-    public string SessionId { get; set; } = null!;
+    public required string SessionId { get; set; }
 
     [JsonProperty("seq")]
     public int Seq { get; set; }

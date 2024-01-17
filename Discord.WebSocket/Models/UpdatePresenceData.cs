@@ -10,7 +10,7 @@ public class UpdatePresenceData
     public int? Since { get; set; }
 
     [JsonProperty("activities")]
-    public Activity[] Activities { get; set; } = null!;
+    public required Activity[] Activities { get; set; }
 
     [JsonProperty("status")]
     [JsonConverter(typeof(StringEnumConverter))]

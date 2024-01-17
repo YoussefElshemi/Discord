@@ -5,19 +5,19 @@ namespace Discord.Models.DispatchEvents;
 public class ReadyEvent
 {
     [JsonProperty("v")]
-    public string Version { get; set; } = null!;
+    public required string Version { get; set; }
 
     [JsonProperty("user")]
-    public User User { get; set; } = null!;
+    public required User User { get; set; }
 
     [JsonProperty("guilds")]
-    public UnavailableGuild[] Guilds { get; set; } = null!;
+    public required UnavailableGuild[] Guilds { get; set; }
 
     [JsonProperty("session_id")]
-    public string SessionId { get; set; } = null!;
+    public required string SessionId { get; set; }
 
     [JsonProperty("resume_gateway_url")]
-    public string ResumeGatewayUrl { get; set; } = null!;
+    public required string ResumeGatewayUrl { get; set; }
 
     [JsonProperty("shard")]
     public int[]? Shard { get; set; }

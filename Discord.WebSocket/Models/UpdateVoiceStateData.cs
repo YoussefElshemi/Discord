@@ -5,7 +5,7 @@ namespace Discord.Models;
 public class UpdateVoiceStateData
 {
     [JsonProperty("guild_id")]
-    public string GuildId { get; set; } = null!;
+    public required string GuildId { get; set; }
 
     [JsonProperty("channel_id")]
     public string? ChannelId { get; set; }

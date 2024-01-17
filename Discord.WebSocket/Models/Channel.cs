@@ -5,7 +5,7 @@ namespace Discord.Models;
 public class Channel
 {
     [JsonProperty("id")]
-    public string Id { get; set; } = null!;
+    public required string Id { get; set; }
 
     [JsonProperty("type")]
     public int Type { get; set; }

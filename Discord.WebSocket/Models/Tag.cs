@@ -5,10 +5,10 @@ namespace Discord.Models;
 public class Tag
 {
     [JsonProperty("id")]
-    public string Id { get; set; } = null!;
+    public required string Id { get; set; }
 
     [JsonProperty("name")]
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; }
 
     [JsonProperty("moderated")]
     public bool Moderated { get; set; }

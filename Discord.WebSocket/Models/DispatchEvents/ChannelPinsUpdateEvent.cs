@@ -8,7 +8,7 @@ public class ChannelPinsUpdateEvent
     public string? GuildId { get; set; }
 
     [JsonProperty("channel_id")]
-    public string ChannelId { get; set; } = null!;
+    public required string ChannelId { get; set; }
 
     [JsonProperty("last_pin_timestamp")]
     public DateTime? LastPinTimestamp { get; set; }

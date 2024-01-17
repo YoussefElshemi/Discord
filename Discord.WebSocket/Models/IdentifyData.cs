@@ -5,7 +5,7 @@ namespace Discord.Models;
 public class IdentifyData
 {
     [JsonProperty("token")]
-    public string Token { get; set; } = null!;
+    public required string Token { get; set; }
 
     [JsonProperty("properties")]
     public IdentifyProperties Properties { get; set; } = new();

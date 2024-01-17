@@ -13,5 +13,5 @@ public class UpdateVoiceStateEvent : BaseEventDto
     }
 
     [JsonProperty("d")]
-    public UpdateVoiceStateData Data { get; set; } = new();
+    public required UpdateVoiceStateData Data { get; set; }
 }
