@@ -443,6 +443,33 @@ public class Client
                 break;
             }
 
+            case Event.EntitlementCreate:
+            {
+                var eventObject = jObj.ToObject<EntitlementEvent>();
+                if (eventObject == null) return;
+
+                // TODO
+                break;
+            }
+
+            case Event.EntitlementUpdate:
+            {
+                var eventObject = jObj.ToObject<EntitlementEvent>();
+                if (eventObject == null) return;
+
+                // TODO
+                break;
+            }
+
+            case Event.EntitlementDelete:
+            {
+                var eventObject = jObj.ToObject<EntitlementEvent>();
+                if (eventObject == null) return;
+
+                // TODO
+                break;
+            }
+
             case Event.GuildCreate:
             {
                 var eventObject = jObj.ToObject<GuildCreateEvent>();

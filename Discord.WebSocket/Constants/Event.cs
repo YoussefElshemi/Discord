@@ -25,4 +25,7 @@ public static class Event
     public const string ThreadMemberUpdate = "THREAD_MEMBER_UPDATE";
     public const string ThreadMembersUpdate = "THREAD_MEMBERS_UPDATE";
 
+    public const string EntitlementCreate = "ENTITLEMENT_CREATE";
+    public const string EntitlementUpdate = "ENTITLEMENT_UPDATE";
+    public const string EntitlementDelete = "ENTITLEMENT_DELETE";
 }
