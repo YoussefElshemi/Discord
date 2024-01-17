@@ -7,13 +7,13 @@ namespace Discord.Models.SendEvents;
 
 public class UpdatePresenceEvent : BaseEventDto
 {
-    [JsonProperty("d")] 
-    public UpdatePresenceData Data { get; set; } = new();
-
     public UpdatePresenceEvent()
     {
         OpCode = OpCode.PresenceUpdate;
     }
+
+    [JsonProperty("d")]
+    public UpdatePresenceData Data { get; set; } = new();
 }
 
 public class UpdatePresenceData
@@ -27,7 +27,7 @@ public class UpdatePresenceData
     [JsonProperty("status")]
     [JsonConverter(typeof(StringEnumConverter))]
     public Status Status { get; set; }
-    
+
     [JsonProperty("afk")]
     public bool Afk { get; set; }
 }

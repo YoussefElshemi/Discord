@@ -1,5 +1,4 @@
-﻿using Discord.Constants;
-using Discord.Enums;
+﻿using Discord.Enums;
 using Newtonsoft.Json;
 
 namespace Discord.Models;
@@ -38,7 +37,7 @@ public class GuildScheduledEvent
 
     [JsonProperty("entity_type")]
     public GuildScheduledEventEntityTypes EntityType { get; set; }
-    
+
     [JsonProperty("entity_id")]
     public string? EntityId { get; set; }
 

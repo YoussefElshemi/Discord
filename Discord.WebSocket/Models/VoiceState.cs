@@ -39,7 +39,7 @@ public class VoiceState
 
     [JsonProperty("suppress")]
     public bool Suppress { get; set; }
-    
+
     [JsonProperty("request_to_speak_timestamp")]
     public DateTime? RequestToSpeakTimestamp { get; set; }
 }

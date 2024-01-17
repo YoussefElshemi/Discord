@@ -3,7 +3,7 @@
 namespace Discord.Models;
 
 public class PresenceUpdate
-{ 
+{
     [JsonProperty("user")]
     public User User { get; set; } = null!;
 

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
- namespace Discord.Models.Dtos;
+namespace Discord.Models.Dtos;
 
 public class HelloEventDto : BaseEventDto
 {

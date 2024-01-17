@@ -6,13 +6,14 @@ namespace Discord.Models.SendEvents;
 
 public class RequestGuildMembersEvent : BaseEventDto
 {
-    [JsonProperty("d")] 
-    public RequestGuildMembersData Data { get; set; } = new();
-    
+
     public RequestGuildMembersEvent()
     {
         OpCode = OpCode.RequestGuildMembers;
     }
+
+    [JsonProperty("d")]
+    public RequestGuildMembersData Data { get; set; } = new();
 }
 
 public class RequestGuildMembersData

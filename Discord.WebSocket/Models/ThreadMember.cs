@@ -3,7 +3,7 @@
 namespace Discord.Models;
 
 public class ThreadMember
-{    
+{
     [JsonProperty("id")]
     public string? Id { get; set; }
 

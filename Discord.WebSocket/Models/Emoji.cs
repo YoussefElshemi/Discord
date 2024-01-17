@@ -21,10 +21,10 @@ public class Emoji
 
     [JsonProperty("managed")]
     public bool? Managed { get; set; }
-    
+
     [JsonProperty("animated")]
     public bool? Animated { get; set; }
-    
+
     [JsonProperty("available")]
     public bool? Available { get; set; }
 }

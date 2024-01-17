@@ -15,5 +15,4 @@ public class ActivityAssets
 
     [JsonProperty("small_text")]
     public string? SmallText { get; set; }
-    
 }

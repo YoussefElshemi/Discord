@@ -6,13 +6,14 @@ namespace Discord.Models.SendEvents;
 
 public class UpdateVoiceStateEvent : BaseEventDto
 {
-    [JsonProperty("d")] 
-    public UpdateVoiceStateData Data { get; set; } = new();
-    
+
     public UpdateVoiceStateEvent()
     {
         OpCode = OpCode.VoiceStateUpdate;
     }
+
+    [JsonProperty("d")]
+    public UpdateVoiceStateData Data { get; set; } = new();
 }
 
 public class UpdateVoiceStateData

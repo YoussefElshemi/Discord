@@ -4,7 +4,7 @@ namespace Discord.Helpers;
 
 public static class ErrorCodeHelper
 {
-    private static readonly Dictionary<int, ErrorCode> ErrorCodes = new Dictionary<int, ErrorCode>
+    private static readonly Dictionary<int, ErrorCode> ErrorCodes = new()
     {
         { 4000, new ErrorCode(4000, "Unknown error", "We're not sure what went wrong. Try reconnecting?", true) },
         { 4001, new ErrorCode(4001, "Unknown opcode", "You sent an invalid Gateway opcode or an invalid payload for an opcode. Don't do that!", true) },
@@ -28,7 +28,7 @@ public static class ErrorCodeHelper
         {
             return errorCode;
         }
-        
+
         Console.WriteLine($"Error code {code} not found.");
         return null;
     }

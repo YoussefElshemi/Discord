@@ -9,6 +9,4 @@ public class ActivityButton
 
     [JsonProperty("url")]
     public string Url { get; set; } = null!;
-
-
 }

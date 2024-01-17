@@ -14,20 +14,20 @@ using Newtonsoft.Json.Linq;
 namespace Discord.Models;
 
 public class Client
-{    
+{
+    public readonly Dictionary<string, GuildChannel> Channels = new();
+
+    public readonly Dictionary<string, Guild> Guilds = new();
+    public readonly Dictionary<string, User> Users = new();
+    private bool _firstAck = true;
+    private CancellationTokenSource? _heartbeatCancellationTokenSource;
     private int _heartbeatInterval;
     private int? _lastSequence;
-    private bool _firstAck = true;
-    
+
     private ClientWebSocket? _webSocket;
-    private CancellationTokenSource? _heartbeatCancellationTokenSource;
 
     public string? Token;
     public User? User;
-    
-    public readonly Dictionary<string, Guild> Guilds = new();
-    public readonly Dictionary<string, User> Users = new();
-    public readonly Dictionary<string, GuildChannel> Channels = new();
 
     public async Task ConnectAsync(string token)
     {
@@ -79,14 +79,14 @@ public class Client
                 SelfMute = updateVoiceStateRequest.SelfMute
             }
         };
-        
+
         await SendAsync(payload.ToJson());
-    } 
+    }
 
     private async void Resume(string sessionId)
     {
         if (string.IsNullOrWhiteSpace(Token) || !_lastSequence.HasValue) return;
-        
+
         var payload = new ResumeEvent
         {
             Data = new ResumeData
@@ -118,13 +118,13 @@ public class Client
             {
                 var buffer = new ArraySegment<byte>(new byte[4096]);
                 var result = await _webSocket.ReceiveAsync(buffer, CancellationToken.None);
-                
+
                 if (result.MessageType != WebSocketMessageType.Text) continue;
                 if (buffer.Array == null) continue;
-                
+
                 var message = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
                 Console.WriteLine($"Received message: {message}");
-                    
+
                 var messageData = JsonConvert.DeserializeObject<WebsocketMessageDto>(message);
                 if (messageData is null)
                 {
@@ -139,17 +139,17 @@ public class Client
                         {
                             _lastSequence = messageData.SequenceNumber;
                         }
-                        
+
                         HandleDispatchEvent(messageData);
                         break;
                     }
-                    
+
                     case OpCode.Heartbeat:
                     {
-                        await SendHeartbeatAsync(); 
+                        await SendHeartbeatAsync();
                         break;
                     }
-                    
+
                     case OpCode.Hello:
                     {
                         var heartbeatData = JsonConvert.DeserializeObject<HelloEventDto>(message);
@@ -161,7 +161,7 @@ public class Client
                         StartHeartbeat();
                         break;
                     }
-                    
+
                     case OpCode.HeartbeatAck when _firstAck:
                     {
                         _firstAck = false;
@@ -197,13 +197,13 @@ public class Client
         _heartbeatCancellationTokenSource = new CancellationTokenSource();
 
         while (!_heartbeatCancellationTokenSource.Token.IsCancellationRequested)
-        {            
+        {
             await SendHeartbeatAsync();
-            
+
             var rand = new Random();
             var jitter = rand.NextDouble();
             var interval = (int)Math.Round(_heartbeatInterval * jitter);
-            
+
             await Task.Delay(interval);
         }
     }
@@ -211,7 +211,7 @@ public class Client
     private async Task SendHeartbeatAsync()
     {
         var heartbeatPayload = new HeartbeatEvent();
-        
+
         if (_lastSequence.HasValue)
         {
             heartbeatPayload.Data = _lastSequence.Value;
@@ -229,11 +229,11 @@ public class Client
     private static void HandleCloseStatus(WebSocketCloseStatus? closeStatus)
     {
         var errorCode = ErrorCodeHelper.GetErrorCodeDetails((int)closeStatus!);
-        if (errorCode is null) 
+        if (errorCode is null)
         {
             throw new WebSocketClosureException(closeStatus);
         }
-        
+
         if (errorCode.Reconnect)
         {
             Console.WriteLine($"{closeStatus} - {errorCode.Description}: {errorCode.Explanation}");
@@ -288,5 +288,4 @@ public class UpdateVoiceStateRequest : UpdateVoiceStateData
 
 public class GuildMembersRequest : RequestGuildMembersData
 {
-    
 }

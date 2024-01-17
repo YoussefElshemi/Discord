@@ -15,6 +15,4 @@ public class WelcomeScreen
 
     [JsonProperty("emoji_name")]
     public string EmojiName { get; set; } = null!;
-
-
 }

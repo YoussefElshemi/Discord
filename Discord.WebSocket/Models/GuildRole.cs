@@ -33,7 +33,7 @@ public class GuildRole
 
     [JsonProperty("mentionable")]
     public bool Mentionable { get; set; }
-    
+
     [JsonProperty("tags")]
     public RoleTag Tags { get; set; } = null!;
 

@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Discord.Enums;
+﻿namespace Discord.Enums;
 
 public enum GuildScheduledEventStatus
 {
