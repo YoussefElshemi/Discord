@@ -28,7 +28,6 @@ public class Client
     private int _heartbeatInterval;
     private int? _lastSequence;
 
-
     public async Task ConnectAsync(string token)
     {
         Token = token;
