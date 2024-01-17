@@ -16,11 +16,11 @@ public static class Event
     public const string ChannelCreate = "CHANNEL_CREATE";
     public const string ChannelUpdate = "CHANNEL_UPDATE";
     public const string ChannelDelete = "CHANNEL_DELETE";
+    public const string ChannelPinsUpdate = "CHANNEL_PINS_UPDATE";
 
     public const string ThreadCreate = "THREAD_CREATE";
     public const string ThreadUpdate = "THREAD_UPDATE";
     public const string ThreadDelete = "THREAD_DELETE";
-
     public const string ThreadListSync = "THREAD_LIST_SYNC";
     public const string ThreadMemberUpdate = "THREAD_MEMBER_UPDATE";
     public const string ThreadMembersUpdate = "THREAD_MEMBERS_UPDATE";

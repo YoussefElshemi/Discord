@@ -364,6 +364,14 @@ public class Client
                 break;
             }
 
+            case Event.ChannelPinsUpdate:
+            {
+                var eventObject = jObj.ToObject<ChannelPinsUpdateEvent>();
+                if (eventObject == null) return;
+
+                break;
+            }
+
             case Event.ThreadCreate:
             {
                 var eventObject = jObj.ToObject<ThreadEvent>();
