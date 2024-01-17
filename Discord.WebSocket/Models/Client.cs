@@ -22,8 +22,12 @@ public class Client
     private ClientWebSocket? _webSocket;
     private CancellationTokenSource? _heartbeatCancellationTokenSource;
 
-    public User? User;
     public string? Token;
+    public User? User;
+    
+    public readonly Dictionary<string, Guild> Guilds = new();
+    public readonly Dictionary<string, User> Users = new();
+    public readonly Dictionary<string, GuildChannel> Channels = new();
 
     public async Task ConnectAsync(string token)
     {
@@ -247,17 +251,33 @@ public class Client
         var jObj = messageData.Data as JObject ?? JObject.FromObject(messageData.Data);
 
         switch (messageData.EventName)
-        { 
+        {
             case Event.Ready:
             {
                 var readyEventData = jObj.ToObject<ReadyEvent>();
                 User = readyEventData?.User;
                 break;
             }
-            
+
             case Event.GuildCreate:
+            {
                 var guildCreateEventData = jObj.ToObject<GuildCreateEvent>();
+                if (guildCreateEventData == null) return;
+
+                Guilds[guildCreateEventData.Id] = guildCreateEventData;
+
+                if (guildCreateEventData.Members != null)
+                {
+                    Array.ForEach(guildCreateEventData.Members, member => Users[member.User.Id] = member.User);
+                }
+
+                if (guildCreateEventData.Channels != null)
+                {
+                    Array.ForEach(guildCreateEventData.Channels, channel => Channels[channel.Id] = channel);
+                }
+
                 break;
+            }
         }
     }
 }
