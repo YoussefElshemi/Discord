@@ -16,18 +16,18 @@ namespace Discord.Models;
 public class Client
 {
     public readonly Dictionary<string, GuildChannel> Channels = new();
-
     public readonly Dictionary<string, Guild> Guilds = new();
     public readonly Dictionary<string, User> Users = new();
+
+    public string? Token;
+    public User? User;
+
+    private ClientWebSocket? _webSocket;
     private bool _firstAck = true;
     private CancellationTokenSource? _heartbeatCancellationTokenSource;
     private int _heartbeatInterval;
     private int? _lastSequence;
 
-    private ClientWebSocket? _webSocket;
-
-    public string? Token;
-    public User? User;
 
     public async Task ConnectAsync(string token)
     {
