@@ -8,7 +8,7 @@ public class PresenceUpdate
     public User User { get; set; } = null!;
 
     [JsonProperty("guild_id")]
-    public ulong GuildId { get; set; }
+    public string GuildId { get; set; } = null!;
 
     [JsonProperty("status")]
     public string Status { get; set; } = null!;

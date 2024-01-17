@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Discord.Models.ReceiveEvents;
+namespace Discord.Models.DispatchEvents;
 
 public class ReadyEvent
 {

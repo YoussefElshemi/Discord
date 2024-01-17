@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using Discord.Models.Dtos;
+using Newtonsoft.Json;
 
-namespace Discord.Models.Dtos;
+namespace Discord.Models.ReceiveEvents;
 
-public class HelloEventDto : BaseEventDto
+public class HelloEvent : BaseEventDto
 {
     [JsonProperty("d")]
     public HelloData? Data { get; set; }

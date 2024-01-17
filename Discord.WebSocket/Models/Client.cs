@@ -5,6 +5,7 @@ using Discord.Enums;
 using Discord.Exceptions;
 using Discord.Extensions;
 using Discord.Helpers;
+using Discord.Models.DispatchEvents;
 using Discord.Models.Dtos;
 using Discord.Models.ReceiveEvents;
 using Discord.Models.SendEvents;
@@ -23,10 +24,11 @@ public class Client
     public User? User;
 
     private ClientWebSocket? _webSocket;
-    private bool _firstAck = true;
     private CancellationTokenSource? _heartbeatCancellationTokenSource;
     private int _heartbeatInterval;
+    private bool _firstAck = true;
     private int? _lastSequence;
+    private string? _sessionId;
 
     public async Task ConnectAsync(string token)
     {
@@ -124,22 +126,22 @@ public class Client
                 var message = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
                 Console.WriteLine($"Received message: {message}");
 
-                var messageData = JsonConvert.DeserializeObject<WebsocketMessageDto>(message);
-                if (messageData is null)
+                var websocketMessage = JsonConvert.DeserializeObject<WebsocketMessageDto>(message);
+                if (websocketMessage is null)
                 {
                     throw new Exception("InvalidWebhookMessage");
                 }
 
-                switch (messageData.OpCode)
+                switch (websocketMessage.OpCode)
                 {
                     case OpCode.Dispatch:
                     {
-                        if (messageData.SequenceNumber.HasValue)
+                        if (websocketMessage.SequenceNumber.HasValue)
                         {
-                            _lastSequence = messageData.SequenceNumber;
+                            _lastSequence = websocketMessage.SequenceNumber;
                         }
 
-                        HandleDispatchEvent(messageData);
+                        HandleDispatchEvent(websocketMessage);
                         break;
                     }
 
@@ -149,12 +151,28 @@ public class Client
                         break;
                     }
 
+                    case OpCode.Reconnect:
+                        JsonConvert.DeserializeObject<ReconnectEvent>(message);
+                        break;
+
+                    case OpCode.InvalidSession:
+                        var invalidSession = JsonConvert.DeserializeObject<InvalidSessionEvent>(message);
+                        if (invalidSession?.Data != null)
+                        {
+                            if (invalidSession.Data.Value && !string.IsNullOrWhiteSpace(_sessionId))
+                            {
+                                Resume(_sessionId);
+                            }
+                        }
+
+                        break;
+
                     case OpCode.Hello:
                     {
-                        var heartbeatData = JsonConvert.DeserializeObject<HelloEventDto>(message);
-                        if (heartbeatData?.Data != null)
+                        var helloEvent = JsonConvert.DeserializeObject<HelloEvent>(message);
+                        if (helloEvent?.Data != null)
                         {
-                            _heartbeatInterval = heartbeatData.Data.HeartbeatInterval;
+                            _heartbeatInterval = helloEvent.Data.HeartbeatInterval;
                         }
 
                         StartHeartbeat();
@@ -164,7 +182,7 @@ public class Client
                     case OpCode.HeartbeatAck when _firstAck:
                     {
                         _firstAck = false;
-                        var identifyPayload = new IdentifyEvent
+                        var payload = new IdentifyEvent
                         {
                             Data =
                             {
@@ -172,7 +190,7 @@ public class Client
                             }
                         };
 
-                        await SendAsync(identifyPayload.ToJson());
+                        await SendAsync(payload.ToJson());
                         break;
                     }
                 }
@@ -225,7 +243,15 @@ public class Client
         _webSocket?.Abort();
     }
 
-    private static void HandleCloseStatus(WebSocketCloseStatus? closeStatus)
+    private async void Reconnect()
+    {
+        _webSocket = new ClientWebSocket();
+        var gatewayUri = new Uri(Endpoints.WebsocketUrl);
+
+        await _webSocket.ConnectAsync(gatewayUri, CancellationToken.None);
+    }
+
+    private void HandleCloseStatus(WebSocketCloseStatus? closeStatus)
     {
         var errorCode = ErrorCodeHelper.GetErrorCodeDetails((int)closeStatus!);
         if (errorCode is null)
@@ -236,7 +262,7 @@ public class Client
         if (errorCode.Reconnect)
         {
             Console.WriteLine($"{closeStatus} - {errorCode.Description}: {errorCode.Explanation}");
-            // TODO: reconnect to websocket
+            Reconnect();
         }
         else
         {
@@ -244,35 +270,42 @@ public class Client
         }
     }
 
-    private void HandleDispatchEvent(WebsocketMessageDto messageData)
+    private void HandleDispatchEvent(WebsocketMessageDto websocketMessage)
     {
-        if (messageData.Data == null) return;
-        var jObj = messageData.Data as JObject ?? JObject.FromObject(messageData.Data);
+        if (websocketMessage.Data == null) return;
+        var jObj = websocketMessage.Data as JObject ?? JObject.FromObject(websocketMessage.Data);
 
-        switch (messageData.EventName)
+        switch (websocketMessage.EventName)
         {
             case Event.Ready:
             {
-                var readyEventData = jObj.ToObject<ReadyEvent>();
-                User = readyEventData?.User;
+                var eventObject = jObj.ToObject<ReadyEvent>();
+                User = eventObject?.User;
+                _sessionId = eventObject?.SessionId;
+                break;
+            }
+
+            case Event.ApplicationCommandPermissionsUpdate:
+            {
+                var eventObject = jObj.ToObject<ApplicationCommandPermissionsUpdateEvent>();
                 break;
             }
 
             case Event.GuildCreate:
             {
-                var guildCreateEventData = jObj.ToObject<GuildCreateEvent>();
-                if (guildCreateEventData == null) return;
+                var eventObject = jObj.ToObject<GuildCreateEvent>();
+                if (eventObject == null) return;
 
-                Guilds[guildCreateEventData.Id] = guildCreateEventData;
+                Guilds[eventObject.Id] = eventObject;
 
-                if (guildCreateEventData.Members != null)
+                if (eventObject.Members != null)
                 {
-                    Array.ForEach(guildCreateEventData.Members, member => Users[member.User.Id] = member.User);
+                    Array.ForEach(eventObject.Members, member => Users[member.User.Id] = member.User);
                 }
 
-                if (guildCreateEventData.Channels != null)
+                if (eventObject.Channels != null)
                 {
-                    Array.ForEach(guildCreateEventData.Channels, channel => Channels[channel.Id] = channel);
+                    Array.ForEach(eventObject.Channels, channel => Channels[channel.Id] = channel);
                 }
 
                 break;
