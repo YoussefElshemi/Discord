@@ -130,4 +130,10 @@ public class Guild : UnavailableGuild
 
     [JsonProperty("safety_alerts_channel_id")]
     public string? SafetyAlertsChannelId { get; set; }
+
+    [JsonIgnore]
+    public Dictionary<string, Channel> Channels = new();
+
+    [JsonIgnore]
+    public Dictionary<string, GuildMember> Members = new();
 }

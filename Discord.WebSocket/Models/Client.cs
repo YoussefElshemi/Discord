@@ -16,7 +16,7 @@ namespace Discord.Models;
 
 public class Client
 {
-    public readonly Dictionary<string, GuildChannel> Channels = new();
+    public readonly Dictionary<string, Channel> Channels = new();
     public readonly Dictionary<string, Guild> Guilds = new();
     public readonly Dictionary<string, User> Users = new();
 
@@ -282,7 +282,7 @@ public class Client
                 var eventObject = jObj.ToObject<ReadyEvent>();
                 if (eventObject == null) return;
 
-                User = eventObject?.User;
+                User = eventObject.User;
                 _sessionId = eventObject?.SessionId;
                 break;
             }
@@ -322,6 +322,90 @@ public class Client
                 break;
             }
 
+            case Event.ChannelCreate:
+            {
+                var eventObject = jObj.ToObject<ChannelEvent>();
+                if (eventObject == null) return;
+
+                if (!string.IsNullOrWhiteSpace(eventObject.GuildId))
+                {
+                    Guilds[eventObject.GuildId].Channels[eventObject.Id] = eventObject;
+                }
+
+                Channels[eventObject.Id] = eventObject;
+                break;
+            }
+
+            case Event.ChannelUpdate:
+            {
+                var eventObject = jObj.ToObject<ChannelEvent>();
+                if (eventObject == null) return;
+
+                if (!string.IsNullOrWhiteSpace(eventObject.GuildId))
+                {
+                    Guilds[eventObject.GuildId].Channels[eventObject.Id] = eventObject;
+                }
+
+                Channels[eventObject.Id] = eventObject;
+                break;
+            }
+
+            case Event.ChannelDelete:
+            {
+                var eventObject = jObj.ToObject<ChannelEvent>();
+                if (eventObject == null) return;
+
+                if (!string.IsNullOrWhiteSpace(eventObject.GuildId))
+                {
+                    Guilds[eventObject.GuildId].Channels.Remove(eventObject.Id);
+                }
+
+                Channels.Remove(eventObject.Id);
+                break;
+            }
+
+            case Event.ThreadCreate:
+            {
+                var eventObject = jObj.ToObject<ThreadEvent>();
+                if (eventObject == null) return;
+
+                if (!string.IsNullOrWhiteSpace(eventObject.GuildId))
+                {
+                    Guilds[eventObject.GuildId].Channels[eventObject.Id] = eventObject;
+                }
+
+                Channels[eventObject.Id] = eventObject;
+                break;
+            }
+
+            case Event.ThreadUpdate:
+            {
+                var eventObject = jObj.ToObject<ThreadEvent>();
+                if (eventObject == null) return;
+
+                if (!string.IsNullOrWhiteSpace(eventObject.GuildId))
+                {
+                    Guilds[eventObject.GuildId].Channels[eventObject.Id] = eventObject;
+                }
+
+                Channels[eventObject.Id] = eventObject;
+                break;
+            }
+
+            case Event.ThreadDelete:
+            {
+                var eventObject = jObj.ToObject<ThreadEvent>();
+                if (eventObject == null) return;
+
+                if (!string.IsNullOrWhiteSpace(eventObject.GuildId))
+                {
+                    Guilds[eventObject.GuildId].Channels[eventObject.Id] = eventObject;
+                }
+
+                Channels.Remove(eventObject.Id);
+                break;
+            }
+
             case Event.GuildCreate:
             {
                 var eventObject = jObj.ToObject<GuildCreateEvent>();
@@ -331,12 +415,20 @@ public class Client
 
                 if (eventObject.Members != null)
                 {
-                    Array.ForEach(eventObject.Members, member => Users[member.User.Id] = member.User);
+                    Array.ForEach(eventObject.Members, member =>
+                    {
+                        Users[member.User.Id] = member.User;
+                        Guilds[eventObject.Id].Members[member.User.Id] = member;
+                    });
                 }
 
                 if (eventObject.Channels != null)
                 {
-                    Array.ForEach(eventObject.Channels, channel => Channels[channel.Id] = channel);
+                    Array.ForEach(eventObject.Channels, channel =>
+                    {
+                        Channels[channel.Id] = channel;
+                        Guilds[eventObject.Id].Channels[channel.Id] = channel;
+                    });
                 }
 
                 break;

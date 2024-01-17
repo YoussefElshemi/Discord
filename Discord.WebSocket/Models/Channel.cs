@@ -2,7 +2,7 @@
 
 namespace Discord.Models;
 
-public class GuildChannel
+public class Channel
 {
     [JsonProperty("id")]
     public string Id { get; set; } = null!;

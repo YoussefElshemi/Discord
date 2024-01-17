@@ -20,10 +20,10 @@ public class GuildCreateEvent : Guild
     public GuildMember[]? Members { get; set; }
 
     [JsonProperty("channels")]
-    public GuildChannel[]? Channels { get; set; }
+    public Channel[]? Channels { get; set; }
 
     [JsonProperty("threads")]
-    public GuildChannel[]? Threads { get; set; }
+    public Channel[]? Threads { get; set; }
 
     [JsonProperty("presences")]
     public PresenceUpdate[]? Presences { get; set; }
