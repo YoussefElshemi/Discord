@@ -21,4 +21,6 @@ public static class Event
     public const string ThreadUpdate = "THREAD_UPDATE";
     public const string ThreadDelete = "THREAD_DELETE";
 
+    public const string ThreadListSync = "THREAD_LIST_SYNC";
+
 }

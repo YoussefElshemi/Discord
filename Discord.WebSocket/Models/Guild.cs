@@ -54,7 +54,7 @@ public class Guild : UnavailableGuild
     public int ExplicitContentFilter { get; set; }
 
     [JsonProperty("roles")]
-    public GuildRole[] Roles { get; set; } = null!;
+    internal GuildRole[] InternalRoles { get; set; } = null!;
 
     [JsonProperty("emojis")]
     public Emoji[] Emojis { get; set; } = null!;
@@ -136,4 +136,7 @@ public class Guild : UnavailableGuild
 
     [JsonIgnore]
     public Dictionary<string, GuildMember> Members = new();
+
+    [JsonIgnore]
+    public Dictionary<string, GuildRole> Roles = new();
 }

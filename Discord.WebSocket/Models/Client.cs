@@ -406,6 +406,18 @@ public class Client
                 break;
             }
 
+            case Event.ThreadListSync:
+            {
+                var eventObject = jObj.ToObject<ThreadListSyncEvent>();
+                if (eventObject == null) return;
+
+                Array.ForEach(eventObject.Threads, thread => { Guilds[eventObject.GuildId].Channels[thread.Id] = thread; });
+
+                // TODO: add logic to handle thread synchronization
+                break;
+            }
+
+
             case Event.GuildCreate:
             {
                 var eventObject = jObj.ToObject<GuildCreateEvent>();
@@ -431,16 +443,10 @@ public class Client
                     });
                 }
 
+                Array.ForEach(eventObject.InternalRoles, role => { Guilds[eventObject.Id].Roles[role.Id] = role; });
+
                 break;
             }
         }
     }
-}
-
-public class UpdateVoiceStateRequest : UpdateVoiceStateData
-{
-}
-
-public class GuildMembersRequest : RequestGuildMembersData
-{
 }
