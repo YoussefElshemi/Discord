@@ -22,5 +22,7 @@ public static class Event
     public const string ThreadDelete = "THREAD_DELETE";
 
     public const string ThreadListSync = "THREAD_LIST_SYNC";
+    public const string ThreadMemberUpdate = "THREAD_MEMBER_UPDATE";
+    public const string ThreadMembersUpdate = "THREAD_MEMBERS_UPDATE";
 
 }

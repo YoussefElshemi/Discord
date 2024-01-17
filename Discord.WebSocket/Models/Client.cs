@@ -417,6 +417,23 @@ public class Client
                 break;
             }
 
+            case Event.ThreadMemberUpdate:
+            {
+                var eventObject = jObj.ToObject<ThreadMemberUpdateEvent>();
+                if (eventObject == null) return;
+
+                // TODO: add logic to handle thread member update
+                break;
+            }
+
+            case Event.ThreadMembersUpdate:
+            {
+                var eventObject = jObj.ToObject<ThreadMembersUpdateEvent>();
+                if (eventObject == null) return;
+
+                // TODO: add logic to handle thread members update
+                break;
+            }
 
             case Event.GuildCreate:
             {
