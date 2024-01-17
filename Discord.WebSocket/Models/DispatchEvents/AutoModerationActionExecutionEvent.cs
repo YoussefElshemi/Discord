@@ -5,7 +5,6 @@ namespace Discord.Models.DispatchEvents;
 
 public class AutoModerationActionExecutionEvent
 {
-
     [JsonProperty("guild_id")]
     public string GuildId { get; set; } = null!;
 

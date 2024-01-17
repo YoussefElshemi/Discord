@@ -287,6 +287,13 @@ public class Client
                 break;
             }
 
+            case Event.ApplicationCommandPermissionsUpdate:
+            {
+                var eventObject = jObj.ToObject<GuildApplicationCommandPermissionsUpdateEvent>();
+                if (eventObject == null) return;
+                break;
+            }
+
             case Event.AutoModerationRuleCreate:
             {
                 var eventObject = jObj.ToObject<AutoModerationRuleEvent>();
