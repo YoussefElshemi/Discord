@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Discord.Models.DispatchEvents;
 
-public class ApplicationCommandPermissionsUpdateEvent
+public class AutoModerationActionExecutionEvent
 {
 
     [JsonProperty("guild_id")]
@@ -16,7 +16,7 @@ public class ApplicationCommandPermissionsUpdateEvent
     public string RuleId { get; set; } = null!;
 
     [JsonProperty("rule_trigger_type")]
-    public TriggerType RuleTriggerType { get; set; }
+    public AutoModerationTriggerType TriggerType { get; set; }
 
     [JsonProperty("user_id")]
     public string UserId { get; set; } = null!;

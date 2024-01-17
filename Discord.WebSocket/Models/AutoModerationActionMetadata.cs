@@ -2,7 +2,7 @@
 
 namespace Discord.Models;
 
-public class ActionMetadata
+public class AutoModerationActionMetadata
 {
     [JsonProperty("channel_id")]
     public string? ChannelId { get; set; }

@@ -280,14 +280,38 @@ public class Client
             case Event.Ready:
             {
                 var eventObject = jObj.ToObject<ReadyEvent>();
+                if (eventObject == null) return;
+
                 User = eventObject?.User;
                 _sessionId = eventObject?.SessionId;
                 break;
             }
 
-            case Event.ApplicationCommandPermissionsUpdate:
+            case Event.AutoModerationRuleCreate:
             {
-                var eventObject = jObj.ToObject<ApplicationCommandPermissionsUpdateEvent>();
+                var eventObject = jObj.ToObject<AutoModerationRuleEvent>();
+                if (eventObject == null) return;
+                break;
+            }
+
+            case Event.AutoModerationRuleUpdate:
+            {
+                var eventObject = jObj.ToObject<AutoModerationRuleEvent>();
+                if (eventObject == null) return;
+                break;
+            }
+
+            case Event.AutoModerationRuleDelete:
+            {
+                var eventObject = jObj.ToObject<AutoModerationRuleEvent>();
+                if (eventObject == null) return;
+                break;
+            }
+
+            case Event.AutoModerationActionExecution:
+            {
+                var eventObject = jObj.ToObject<AutoModerationActionExecutionEvent>();
+                if (eventObject == null) return;
                 break;
             }
 

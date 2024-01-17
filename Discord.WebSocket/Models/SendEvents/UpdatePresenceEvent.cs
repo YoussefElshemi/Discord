@@ -26,7 +26,7 @@ public class UpdatePresenceData
 
     [JsonProperty("status")]
     [JsonConverter(typeof(StringEnumConverter))]
-    public Status Status { get; set; }
+    public PresenceStatus Status { get; set; }
 
     [JsonProperty("afk")]
     public bool Afk { get; set; }

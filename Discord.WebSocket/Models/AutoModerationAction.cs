@@ -6,8 +6,8 @@ namespace Discord.Models;
 public class AutoModerationAction
 {
     [JsonProperty("type")]
-    public ActionType Type { get; set; }
+    public AutoModerationActionType Type { get; set; }
 
     [JsonProperty("metadata")]
-    public ActionMetadata? Metadata { get; set; }
+    public AutoModerationActionMetadata? Metadata { get; set; }
 }

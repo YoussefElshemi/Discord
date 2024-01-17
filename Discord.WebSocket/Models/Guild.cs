@@ -60,7 +60,7 @@ public class Guild : UnavailableGuild
     public Emoji[] Emojis { get; set; } = null!;
 
     [JsonProperty("features")]
-    public GuildFeatures[] Features { get; set; } = null!;
+    public GuildFeature[] Features { get; set; } = null!;
 
     [JsonProperty("mfa_level")]
     public int MfaLevel { get; set; }

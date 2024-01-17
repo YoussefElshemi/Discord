@@ -1,6 +1,6 @@
 ﻿namespace Discord.Enums;
 
-public enum Status
+public enum PresenceStatus
 {
     Online,
     Dnd,

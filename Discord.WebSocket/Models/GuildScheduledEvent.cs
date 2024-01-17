@@ -36,7 +36,7 @@ public class GuildScheduledEvent
     public GuildScheduledEventStatus Status { get; set; }
 
     [JsonProperty("entity_type")]
-    public GuildScheduledEventEntityTypes EntityType { get; set; }
+    public GuildScheduledEventEntityType EntityType { get; set; }
 
     [JsonProperty("entity_id")]
     public string? EntityId { get; set; }

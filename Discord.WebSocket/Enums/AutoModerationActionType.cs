@@ -1,6 +1,6 @@
 ﻿namespace Discord.Enums;
 
-public enum ActionType
+public enum AutoModerationActionType
 {
     BLOCK_MESSAGE = 1,
     SEND_ALERT_MESSAGE = 2,

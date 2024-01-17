@@ -5,7 +5,7 @@ using Newtonsoft.Json.Converters;
 namespace Discord.Enums;
 
 [JsonConverter(typeof(StringEnumConverter))]
-public enum GuildFeatures
+public enum GuildFeature
 {
     [EnumMember(Value = "ANIMATED_BANNER")]
     AnimatedBanner,

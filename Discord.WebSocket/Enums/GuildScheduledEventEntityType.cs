@@ -1,6 +1,6 @@
 ﻿namespace Discord.Enums;
 
-public enum GuildScheduledEventEntityTypes
+public enum GuildScheduledEventEntityType
 {
     STAGE_INSTANCE = 1,
     VOICE = 2,
