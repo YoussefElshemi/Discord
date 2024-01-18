@@ -1,4 +1,5 @@
-﻿using Discord.Models;
+﻿using System.Net.WebSockets;
+using Discord.Models;
 
 namespace Discord.Helpers;
 
@@ -22,9 +23,9 @@ public static class ErrorCodeHelper
         { 4014, new ErrorCode(4014, "Disallowed intent(s)", "You sent a disallowed intent for a Gateway Intent. You may have tried to specify an intent that you have not enabled or are not approved for.", false) }
     };
 
-    public static ErrorCode? GetErrorCodeDetails(int code)
+    public static ErrorCode? GetErrorCodeDetails(WebSocketCloseStatus code)
     {
-        if (ErrorCodes.TryGetValue(code, out var errorCode))
+        if (ErrorCodes.TryGetValue((int)code, out var errorCode))
         {
             return errorCode;
         }
