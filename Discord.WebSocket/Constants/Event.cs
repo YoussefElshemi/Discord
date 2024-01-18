@@ -4,8 +4,6 @@ public static class Event
 {
     public const string Ready = "READY";
 
-    public const string GuildCreate = "GUILD_CREATE";
-
     public const string ApplicationCommandPermissionsUpdate = "APPLICATION_COMMAND_PERMISSIONS_UPDATE";
 
     public const string AutoModerationRuleCreate = "AUTO_MODERATION_RULE_CREATE";
@@ -28,4 +26,9 @@ public static class Event
     public const string EntitlementCreate = "ENTITLEMENT_CREATE";
     public const string EntitlementUpdate = "ENTITLEMENT_UPDATE";
     public const string EntitlementDelete = "ENTITLEMENT_DELETE";
+
+    public const string GuildCreate = "GUILD_CREATE";
+    public const string GuildUpdate = "GUILD_UPDATE";
+    public const string GuildDelete = "GUILD_DELETE";
+
 }

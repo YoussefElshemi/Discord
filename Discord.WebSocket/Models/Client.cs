@@ -496,7 +496,30 @@ public class Client
                 }
 
                 Array.ForEach(eventObject.InternalRoles, role => { Guilds[eventObject.Id].Roles[role.Id] = role; });
+                break;
+            }
 
+            case Event.GuildUpdate:
+            {
+                var eventObject = jObj.ToObject<GuildEvent>();
+                if (eventObject == null) return;
+
+                Guilds[eventObject.Id] = eventObject;
+                break;
+            }
+
+            case Event.GuildDelete:
+            {
+                var eventObject = jObj.ToObject<GuildEvent>();
+                if (eventObject == null) return;
+
+                var channels = Channels.Where(channel => channel.Value.GuildId == eventObject.Id);
+                foreach (var channel in channels)
+                {
+                    Channels.Remove(channel.Value.Id);
+                }
+
+                Guilds.Remove(eventObject.Id);
                 break;
             }
         }
