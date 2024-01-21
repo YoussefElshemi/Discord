@@ -286,7 +286,7 @@ public class Client : EventEmitter
                 User = eventObject.User;
                 _sessionId = eventObject.SessionId;
 
-                ReadyEvent(EventArgs.Empty);
+                EmitReadyEvent(EventArgs.Empty);
                 break;
             }
 
@@ -295,7 +295,7 @@ public class Client : EventEmitter
                 var eventObject = jObj.ToObject<GuildApplicationCommandPermissionsUpdateEvent>();
                 if (eventObject == null) return;
 
-                ApplicationCommandPermissionsUpdateEvent(
+                EmitApplicationCommandPermissionsUpdateEvent(
                     new ClientEventArgs<GuildApplicationCommandPermissionsUpdateEvent>
                     {
                         Event = eventObject
@@ -310,7 +310,7 @@ public class Client : EventEmitter
                 var eventObject = jObj.ToObject<AutoModerationRuleEvent>();
                 if (eventObject == null) return;
 
-                AutoModerationRuleCreateEvent(
+                EmitAutoModerationRuleCreateEvent(
                     new ClientEventArgs<AutoModerationRuleEvent>
                     {
                         Event = eventObject
@@ -325,7 +325,7 @@ public class Client : EventEmitter
                 var eventObject = jObj.ToObject<AutoModerationRuleEvent>();
                 if (eventObject == null) return;
 
-                AutoModerationRuleUpdateEvent(
+                EmitAutoModerationRuleUpdateEvent(
                     new ClientEventArgs<AutoModerationRuleEvent>
                     {
                         Event = eventObject
@@ -340,7 +340,7 @@ public class Client : EventEmitter
                 var eventObject = jObj.ToObject<AutoModerationRuleEvent>();
                 if (eventObject == null) return;
 
-                AutoModerationRuleDeleteEvent(
+                EmitAutoModerationRuleDeleteEvent(
                     new ClientEventArgs<AutoModerationRuleEvent>
                     {
                         Event = eventObject
@@ -355,7 +355,7 @@ public class Client : EventEmitter
                 var eventObject = jObj.ToObject<AutoModerationActionExecutionEvent>();
                 if (eventObject == null) return;
 
-                AutoModerationActionExecutionEvent(
+                EmitAutoModerationActionExecutionEvent(
                     new ClientEventArgs<AutoModerationActionExecutionEvent>
                     {
                         Event = eventObject
@@ -377,7 +377,7 @@ public class Client : EventEmitter
 
                 Channels[eventObject.Id] = eventObject;
 
-                ChannelCreateEvent(
+                EmitChannelCreateEvent(
                     new ClientEventArgs<ChannelEvent>
                     {
                         Event = eventObject
@@ -399,7 +399,7 @@ public class Client : EventEmitter
 
                 Channels[eventObject.Id] = eventObject;
 
-                ChannelUpdateEvent(
+                EmitChannelUpdateEvent(
                     new ClientEventArgs<ChannelEvent>
                     {
                         Event = eventObject
@@ -421,7 +421,7 @@ public class Client : EventEmitter
 
                 Channels.Remove(eventObject.Id);
 
-                ChannelDeleteEvent(
+                EmitChannelDeleteEvent(
                     new ClientEventArgs<ChannelEvent>
                     {
                         Event = eventObject
@@ -436,7 +436,7 @@ public class Client : EventEmitter
                 var eventObject = jObj.ToObject<ChannelPinsUpdateEvent>();
                 if (eventObject == null) return;
 
-                ChannelPinsUpdateEvent(
+                EmitChannelPinsUpdateEvent(
                     new ClientEventArgs<ChannelPinsUpdateEvent>
                     {
                         Event = eventObject
@@ -458,7 +458,7 @@ public class Client : EventEmitter
 
                 Channels[eventObject.Id] = eventObject;
 
-                ThreadCreateEvent(
+                EmitThreadCreateEvent(
                     new ClientEventArgs<ThreadEvent>
                     {
                         Event = eventObject
@@ -480,7 +480,7 @@ public class Client : EventEmitter
 
                 Channels[eventObject.Id] = eventObject;
 
-                ThreadUpdateEvent(
+                EmitThreadUpdateEvent(
                     new ClientEventArgs<ThreadEvent>
                     {
                         Event = eventObject
@@ -502,7 +502,7 @@ public class Client : EventEmitter
 
                 Channels.Remove(eventObject.Id);
 
-                ThreadDeleteEvent(
+                EmitThreadDeleteEvent(
                     new ClientEventArgs<ThreadEvent>
                     {
                         Event = eventObject
@@ -520,7 +520,7 @@ public class Client : EventEmitter
                 Array.ForEach(eventObject.Threads, thread => { Guilds[eventObject.GuildId].Channels[thread.Id] = thread; });
 
                 // TODO: add logic to handle thread synchronization
-                ThreadListSyncEvent(
+                EmitThreadListSyncEvent(
                     new ClientEventArgs<ThreadListSyncEvent>
                     {
                         Event = eventObject
@@ -536,7 +536,7 @@ public class Client : EventEmitter
                 if (eventObject == null) return;
 
                 // TODO: add logic to handle thread member update
-                ThreadMemberUpdateEvent(
+                EmitThreadMemberUpdateEvent(
                     new ClientEventArgs<ThreadMemberUpdateEvent>
                     {
                         Event = eventObject
@@ -552,7 +552,7 @@ public class Client : EventEmitter
                 if (eventObject == null) return;
 
                 // TODO: add logic to handle thread members update
-                ThreadMembersUpdateEvent(
+                EmitThreadMembersUpdateEvent(
                     new ClientEventArgs<ThreadMembersUpdateEvent>
                     {
                         Event = eventObject
@@ -568,7 +568,7 @@ public class Client : EventEmitter
                 if (eventObject == null) return;
 
                 // TODO
-                EntitlementCreateEvent(
+                EmitEntitlementCreateEvent(
                     new ClientEventArgs<EntitlementEvent>
                     {
                         Event = eventObject
@@ -584,7 +584,7 @@ public class Client : EventEmitter
                 if (eventObject == null) return;
 
                 // TODO
-                EntitlementUpdateEvent(
+                EmitEntitlementUpdateEvent(
                     new ClientEventArgs<EntitlementEvent>
                     {
                         Event = eventObject
@@ -600,7 +600,7 @@ public class Client : EventEmitter
                 if (eventObject == null) return;
 
                 // TODO
-                EntitlementDeleteEvent(
+                EmitEntitlementDeleteEvent(
                     new ClientEventArgs<EntitlementEvent>
                     {
                         Event = eventObject
@@ -637,7 +637,7 @@ public class Client : EventEmitter
 
                 Array.ForEach(eventObject.InternalRoles, role => { Guilds[eventObject.Id].Roles[role.Id] = role; });
 
-                GuildCreateEvent(
+                EmitGuildCreateEvent(
                     new ClientEventArgs<GuildCreateEvent>
                     {
                         Event = eventObject
@@ -654,7 +654,7 @@ public class Client : EventEmitter
 
                 Guilds[eventObject.Id] = eventObject;
 
-                GuildUpdateEvent(
+                EmitGuildUpdateEvent(
                     new ClientEventArgs<GuildEvent>
                     {
                         Event = eventObject
@@ -677,7 +677,7 @@ public class Client : EventEmitter
 
                 Guilds.Remove(eventObject.Id);
 
-                GuildDeleteEvent(
+                EmitGuildDeleteEvent(
                     new ClientEventArgs<GuildEvent>
                     {
                         Event = eventObject

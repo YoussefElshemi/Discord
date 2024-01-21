@@ -27,112 +27,112 @@ public class EventEmitter
     public event EventHandler<ClientEventArgs<GuildEvent>>? OnGuildUpdate;
     public event EventHandler<ClientEventArgs<GuildEvent>>? OnGuildDelete;
 
-    protected void ReadyEvent(EventArgs e)
+    protected void EmitReadyEvent(EventArgs e)
     {
         OnReady?.Invoke(this, e);
     }
 
-    protected void ApplicationCommandPermissionsUpdateEvent(ClientEventArgs<GuildApplicationCommandPermissionsUpdateEvent> e)
+    protected void EmitApplicationCommandPermissionsUpdateEvent(ClientEventArgs<GuildApplicationCommandPermissionsUpdateEvent> e)
     {
         OnApplicationCommandPermissionsUpdate?.Invoke(this, e);
     }
 
-    protected void AutoModerationRuleCreateEvent(ClientEventArgs<AutoModerationRuleEvent> e)
+    protected void EmitAutoModerationRuleCreateEvent(ClientEventArgs<AutoModerationRuleEvent> e)
     {
         OnAutoModerationRuleCreate?.Invoke(this, e);
     }
 
-    protected void AutoModerationRuleUpdateEvent(ClientEventArgs<AutoModerationRuleEvent> e)
+    protected void EmitAutoModerationRuleUpdateEvent(ClientEventArgs<AutoModerationRuleEvent> e)
     {
         OnAutoModerationRuleUpdate?.Invoke(this, e);
     }
 
-    protected void AutoModerationRuleDeleteEvent(ClientEventArgs<AutoModerationRuleEvent> e)
+    protected void EmitAutoModerationRuleDeleteEvent(ClientEventArgs<AutoModerationRuleEvent> e)
     {
         OnAutoModerationRuleDelete?.Invoke(this, e);
     }
 
-    protected void AutoModerationActionExecutionEvent(ClientEventArgs<AutoModerationActionExecutionEvent> e)
+    protected void EmitAutoModerationActionExecutionEvent(ClientEventArgs<AutoModerationActionExecutionEvent> e)
     {
         OnAutoModerationActionExecution?.Invoke(this, e);
     }
 
-    protected void ChannelCreateEvent(ClientEventArgs<ChannelEvent> e)
+    protected void EmitChannelCreateEvent(ClientEventArgs<ChannelEvent> e)
     {
         OnChannelCreate?.Invoke(this, e);
     }
 
-    protected void ChannelUpdateEvent(ClientEventArgs<ChannelEvent> e)
+    protected void EmitChannelUpdateEvent(ClientEventArgs<ChannelEvent> e)
     {
         OnChannelUpdate?.Invoke(this, e);
     }
 
-    protected void ChannelDeleteEvent(ClientEventArgs<ChannelEvent> e)
+    protected void EmitChannelDeleteEvent(ClientEventArgs<ChannelEvent> e)
     {
         OnChannelDelete?.Invoke(this, e);
     }
 
-    protected void ChannelPinsUpdateEvent(ClientEventArgs<ChannelPinsUpdateEvent> e)
+    protected void EmitChannelPinsUpdateEvent(ClientEventArgs<ChannelPinsUpdateEvent> e)
     {
         OnChannelPinsUpdate?.Invoke(this, e);
     }
 
-    protected void ThreadCreateEvent(ClientEventArgs<ThreadEvent> e)
+    protected void EmitThreadCreateEvent(ClientEventArgs<ThreadEvent> e)
     {
         OnThreadCreate?.Invoke(this, e);
     }
 
-    protected void ThreadUpdateEvent(ClientEventArgs<ThreadEvent> e)
+    protected void EmitThreadUpdateEvent(ClientEventArgs<ThreadEvent> e)
     {
         OnThreadUpdate?.Invoke(this, e);
     }
 
-    protected void ThreadDeleteEvent(ClientEventArgs<ThreadEvent> e)
+    protected void EmitThreadDeleteEvent(ClientEventArgs<ThreadEvent> e)
     {
         OnThreadDelete?.Invoke(this, e);
     }
 
-    protected void ThreadListSyncEvent(ClientEventArgs<ThreadListSyncEvent> e)
+    protected void EmitThreadListSyncEvent(ClientEventArgs<ThreadListSyncEvent> e)
     {
         OnThreadListSync?.Invoke(this, e);
     }
 
-    protected void ThreadMemberUpdateEvent(ClientEventArgs<ThreadMemberUpdateEvent> e)
+    protected void EmitThreadMemberUpdateEvent(ClientEventArgs<ThreadMemberUpdateEvent> e)
     {
         OnThreadMemberUpdate?.Invoke(this, e);
     }
 
-    protected void ThreadMembersUpdateEvent(ClientEventArgs<ThreadMembersUpdateEvent> e)
+    protected void EmitThreadMembersUpdateEvent(ClientEventArgs<ThreadMembersUpdateEvent> e)
     {
         OnThreadMembersUpdate?.Invoke(this, e);
     }
 
-    protected void EntitlementCreateEvent(ClientEventArgs<EntitlementEvent> e)
+    protected void EmitEntitlementCreateEvent(ClientEventArgs<EntitlementEvent> e)
     {
         OnEntitlementCreate?.Invoke(this, e);
     }
 
-    protected void EntitlementUpdateEvent(ClientEventArgs<EntitlementEvent> e)
+    protected void EmitEntitlementUpdateEvent(ClientEventArgs<EntitlementEvent> e)
     {
         OnEntitlementUpdate?.Invoke(this, e);
     }
 
-    protected void EntitlementDeleteEvent(ClientEventArgs<EntitlementEvent> e)
+    protected void EmitEntitlementDeleteEvent(ClientEventArgs<EntitlementEvent> e)
     {
         OnEntitlementDelete?.Invoke(this, e);
     }
 
-    protected void GuildCreateEvent(ClientEventArgs<GuildCreateEvent> e)
+    protected void EmitGuildCreateEvent(ClientEventArgs<GuildCreateEvent> e)
     {
         OnGuildCreate?.Invoke(this, e);
     }
 
-    protected void GuildUpdateEvent(ClientEventArgs<GuildEvent> e)
+    protected void EmitGuildUpdateEvent(ClientEventArgs<GuildEvent> e)
     {
         OnGuildUpdate?.Invoke(this, e);
     }
 
-    protected void GuildDeleteEvent(ClientEventArgs<GuildEvent> e)
+    protected void EmitGuildDeleteEvent(ClientEventArgs<GuildEvent> e)
     {
         OnGuildDelete?.Invoke(this, e);
     }
