@@ -254,12 +254,7 @@ public class Client : EventEmitter
 
     private void HandleCloseStatus(WebSocketCloseStatus? closeStatus)
     {
-        if (closeStatus is null)
-        {
-            throw new WebSocketClosureException(closeStatus);
-        }
-
-        var errorCode = ErrorCodeHelper.GetErrorCodeDetails(closeStatus.Value);
+        var errorCode = ErrorCodeHelper.GetErrorCodeDetails(closeStatus);
 
         if (errorCode is null)
         {

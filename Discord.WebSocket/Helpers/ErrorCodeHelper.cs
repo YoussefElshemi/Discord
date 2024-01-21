@@ -23,14 +23,13 @@ public static class ErrorCodeHelper
         { 4014, new ErrorCode(4014, "Disallowed intent(s)", "You sent a disallowed intent for a Gateway Intent. You may have tried to specify an intent that you have not enabled or are not approved for.", false) }
     };
 
-    public static ErrorCode? GetErrorCodeDetails(WebSocketCloseStatus code)
+    public static ErrorCode? GetErrorCodeDetails(WebSocketCloseStatus? code)
     {
-        if (ErrorCodes.TryGetValue((int)code, out var errorCode))
+        if (code is null || !ErrorCodes.ContainsKey((int)code))
         {
-            return errorCode;
+            return null;
         }
 
-        Console.WriteLine($"Error code {code} not found.");
-        return null;
+        return ErrorCodes.GetValueOrDefault((int)code);
     }
 }
