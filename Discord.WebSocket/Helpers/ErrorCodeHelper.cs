@@ -1,11 +1,12 @@
-﻿using System.Net.WebSockets;
+﻿using System.Collections.ObjectModel;
+using System.Net.WebSockets;
 using Discord.Models;
 
 namespace Discord.Helpers;
 
 public static class ErrorCodeHelper
 {
-    private static readonly Dictionary<int, ErrorCode> ErrorCodes = new()
+    private static readonly ReadOnlyDictionary<int, ErrorCode> ErrorCodes = new(new Dictionary<int, ErrorCode>
     {
         { 4000, new ErrorCode(4000, "Unknown error", "We're not sure what went wrong. Try reconnecting?", true) },
         { 4001, new ErrorCode(4001, "Unknown opcode", "You sent an invalid Gateway opcode or an invalid payload for an opcode. Don't do that!", true) },
@@ -21,7 +22,7 @@ public static class ErrorCodeHelper
         { 4012, new ErrorCode(4012, "Invalid API version", "You sent an invalid version for the gateway.", false) },
         { 4013, new ErrorCode(4013, "Invalid intent(s)", "You sent an invalid intent for a Gateway Intent. You may have incorrectly calculated the bitwise value.", false) },
         { 4014, new ErrorCode(4014, "Disallowed intent(s)", "You sent a disallowed intent for a Gateway Intent. You may have tried to specify an intent that you have not enabled or are not approved for.", false) }
-    };
+    });
 
     public static ErrorCode? GetErrorCodeDetails(WebSocketCloseStatus? code)
     {
