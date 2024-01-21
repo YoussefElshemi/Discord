@@ -7,6 +7,7 @@ using Discord.Extensions;
 using Discord.Helpers;
 using Discord.Models.DispatchEvents;
 using Discord.Models.Dtos;
+using Discord.Models.EventArgs;
 using Discord.Models.ReceiveEvents;
 using Discord.Models.SendEvents;
 using Newtonsoft.Json;
@@ -14,7 +15,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Discord.Models;
 
-public class Client
+public class Client : EventEmitter
 {
     public readonly Dictionary<string, Channel> Channels = new();
     public readonly Dictionary<string, Guild> Guilds = new();
@@ -289,7 +290,9 @@ public class Client
                 if (eventObject == null) return;
 
                 User = eventObject.User;
-                _sessionId = eventObject?.SessionId;
+                _sessionId = eventObject.SessionId;
+
+                ReadyEvent(System.EventArgs.Empty);
                 break;
             }
 
@@ -297,6 +300,14 @@ public class Client
             {
                 var eventObject = jObj.ToObject<GuildApplicationCommandPermissionsUpdateEvent>();
                 if (eventObject == null) return;
+
+                ApplicationCommandPermissionsUpdateEvent(
+                    new GuildApplicationCommandPermissionsUpdateEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -304,6 +315,14 @@ public class Client
             {
                 var eventObject = jObj.ToObject<AutoModerationRuleEvent>();
                 if (eventObject == null) return;
+
+                AutoModerationRuleCreateEvent(
+                    new AutoModerationRuleEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -311,6 +330,14 @@ public class Client
             {
                 var eventObject = jObj.ToObject<AutoModerationRuleEvent>();
                 if (eventObject == null) return;
+
+                AutoModerationRuleUpdateEvent(
+                    new AutoModerationRuleEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -318,6 +345,14 @@ public class Client
             {
                 var eventObject = jObj.ToObject<AutoModerationRuleEvent>();
                 if (eventObject == null) return;
+
+                AutoModerationRuleDeleteEvent(
+                    new AutoModerationRuleEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -325,6 +360,14 @@ public class Client
             {
                 var eventObject = jObj.ToObject<AutoModerationActionExecutionEvent>();
                 if (eventObject == null) return;
+
+                AutoModerationActionExecutionEvent(
+                    new AutoModerationActionExecutionEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -339,6 +382,14 @@ public class Client
                 }
 
                 Channels[eventObject.Id] = eventObject;
+
+                ChannelCreateEvent(
+                    new ChannelEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -353,6 +404,14 @@ public class Client
                 }
 
                 Channels[eventObject.Id] = eventObject;
+
+                ChannelUpdateEvent(
+                    new ChannelEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -367,6 +426,14 @@ public class Client
                 }
 
                 Channels.Remove(eventObject.Id);
+
+                ChannelDeleteEvent(
+                    new ChannelEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -374,6 +441,13 @@ public class Client
             {
                 var eventObject = jObj.ToObject<ChannelPinsUpdateEvent>();
                 if (eventObject == null) return;
+
+                ChannelPinsUpdateEvent(
+                    new ChannelPinsUpdateEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
 
                 break;
             }
@@ -389,6 +463,14 @@ public class Client
                 }
 
                 Channels[eventObject.Id] = eventObject;
+
+                ThreadCreateEvent(
+                    new ThreadEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -403,6 +485,14 @@ public class Client
                 }
 
                 Channels[eventObject.Id] = eventObject;
+
+                ThreadUpdateEvent(
+                    new ThreadEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -417,6 +507,14 @@ public class Client
                 }
 
                 Channels.Remove(eventObject.Id);
+
+                ThreadDeleteEvent(
+                    new ThreadEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -428,6 +526,13 @@ public class Client
                 Array.ForEach(eventObject.Threads, thread => { Guilds[eventObject.GuildId].Channels[thread.Id] = thread; });
 
                 // TODO: add logic to handle thread synchronization
+                ThreadListSyncEvent(
+                    new ThreadListSyncEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -437,6 +542,13 @@ public class Client
                 if (eventObject == null) return;
 
                 // TODO: add logic to handle thread member update
+                ThreadMemberUpdateEvent(
+                    new ThreadMemberUpdateEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -446,6 +558,13 @@ public class Client
                 if (eventObject == null) return;
 
                 // TODO: add logic to handle thread members update
+                ThreadMembersUpdateEvent(
+                    new ThreadMembersUpdateEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -455,6 +574,13 @@ public class Client
                 if (eventObject == null) return;
 
                 // TODO
+                EntitlementCreateEvent(
+                    new EntitlementEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -464,6 +590,13 @@ public class Client
                 if (eventObject == null) return;
 
                 // TODO
+                EntitlementUpdateEvent(
+                    new EntitlementEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -473,6 +606,13 @@ public class Client
                 if (eventObject == null) return;
 
                 // TODO
+                EntitlementDeleteEvent(
+                    new EntitlementEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -502,6 +642,14 @@ public class Client
                 }
 
                 Array.ForEach(eventObject.InternalRoles, role => { Guilds[eventObject.Id].Roles[role.Id] = role; });
+
+                GuildCreateEvent(
+                    new GuildCreateEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -511,6 +659,14 @@ public class Client
                 if (eventObject == null) return;
 
                 Guilds[eventObject.Id] = eventObject;
+
+                GuildUpdateEvent(
+                    new GuildEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
 
@@ -526,6 +682,14 @@ public class Client
                 }
 
                 Guilds.Remove(eventObject.Id);
+
+                GuildDeleteEvent(
+                    new GuildEventArgs
+                    {
+                        Event = eventObject
+                    }
+                );
+
                 break;
             }
         }
