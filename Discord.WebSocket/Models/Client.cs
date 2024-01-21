@@ -50,7 +50,7 @@ public class Client : EventEmitter
         await Task.Delay(-1);
     }
 
-    public async void RequestGuildMembers(GuildMembersRequest guildMembersRequest)
+    public async void RequestGuildMembersAsync(GuildMembersRequest guildMembersRequest)
     {
         var payload = new RequestGuildMembersEvent
         {
@@ -68,7 +68,7 @@ public class Client : EventEmitter
         await SendAsync(payload.ToJson());
     }
 
-    public async void UpdateVoiceState(UpdateVoiceStateRequest updateVoiceStateRequest)
+    public async void UpdateVoiceStateAsync(UpdateVoiceStateRequest updateVoiceStateRequest)
     {
         var payload = new UpdateVoiceStateEvent
         {
@@ -84,7 +84,7 @@ public class Client : EventEmitter
         await SendAsync(payload.ToJson());
     }
 
-    private async void Resume(string sessionId)
+    private async void ResumeAsync(string sessionId)
     {
         if (string.IsNullOrWhiteSpace(Token) || !_lastSequence.HasValue) return;
 
@@ -161,7 +161,7 @@ public class Client : EventEmitter
                         {
                             if (invalidSession.Data.Value && !string.IsNullOrWhiteSpace(_sessionId))
                             {
-                                Resume(_sessionId);
+                                ResumeAsync(_sessionId);
                             }
                         }
 
@@ -175,7 +175,7 @@ public class Client : EventEmitter
                             _heartbeatInterval = helloEvent.Data.HeartbeatInterval;
                         }
 
-                        StartHeartbeat();
+                        StartHeartbeatAsync();
                         break;
                     }
 
@@ -209,7 +209,7 @@ public class Client : EventEmitter
         }
     }
 
-    private async void StartHeartbeat()
+    private async void StartHeartbeatAsync()
     {
         _heartbeatCancellationTokenSource = new CancellationTokenSource();
 
@@ -243,7 +243,7 @@ public class Client : EventEmitter
         _webSocket?.Abort();
     }
 
-    private async void Reconnect()
+    private async void ReconnectAsync()
     {
         _webSocket = new ClientWebSocket();
         var gatewayUri = new Uri(Endpoints.WebsocketUrl);
@@ -263,7 +263,7 @@ public class Client : EventEmitter
         if (errorCode.Reconnect)
         {
             Console.WriteLine($"{closeStatus} - {errorCode.Description}: {errorCode.Explanation}");
-            Reconnect();
+            ReconnectAsync();
         }
         else
         {
