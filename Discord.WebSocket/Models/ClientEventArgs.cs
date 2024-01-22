@@ -2,5 +2,6 @@
 
 public class ClientEventArgs<T> : EventArgs
 {
-    public required T Event { get; set; }
+    public required T Event { get; init; }
+    public required Client Client { get; set; }
 }

@@ -1,54 +1,30 @@
 ﻿using System.Net.WebSockets;
-using System.Text;
 using Discord.Constants;
-using Discord.Enums;
 using Discord.Exceptions;
 using Discord.Extensions;
 using Discord.Helpers;
 using Discord.Models.DispatchEvents;
 using Discord.Models.Dtos;
-using Discord.Models.ReceiveEvents;
 using Discord.Models.SendEvents;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Discord.Models;
 
 public class Client : EventEmitter
 {
-    public readonly Dictionary<string, Channel> Channels = new();
-    public readonly Dictionary<string, Guild> Guilds = new();
-    public readonly Dictionary<string, User> Users = new();
+    public Dictionary<string, Channel> Channels { get; } = new();
+    public Dictionary<string, Guild> Guilds { get; } = new();
+    public Dictionary<string, User> Users { get; } = new();
 
     public string? Token;
     public User? User;
 
-    private ClientWebSocket? _webSocket;
+    internal ClientWebSocket? WebSocket;
     private CancellationTokenSource? _heartbeatCancellationTokenSource;
-    private int _heartbeatInterval;
-    private bool _firstAck = true;
-    private int? _lastSequence;
-    private string? _sessionId;
-
-    public async Task ConnectAsync(string token)
-    {
-        Token = token;
-        _webSocket = new ClientWebSocket();
-        var gatewayUri = new Uri(Endpoints.WebsocketUrl);
-
-        try
-        {
-            await _webSocket.ConnectAsync(gatewayUri, CancellationToken.None);
-            Console.WriteLine("WebSocket connection opened.");
-            _ = Task.Run(async () => await ReceiveAndHandleMessagesAsync(token));
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Unexpected error: {ex.Message}");
-        }
-
-        await Task.Delay(-1);
-    }
+    internal int HeartbeatInterval;
+    internal bool FirstAck = true;
+    internal int? LastSequence;
+    internal string? SessionId;
 
     public async void RequestGuildMembersAsync(GuildMembersRequest guildMembersRequest)
     {
@@ -65,7 +41,7 @@ public class Client : EventEmitter
             }
         };
 
-        await SendAsync(payload.ToJson());
+        await this.SendAsync(payload.ToJson());
     }
 
     public async void UpdateVoiceStateAsync(UpdateVoiceStateRequest updateVoiceStateRequest)
@@ -81,12 +57,12 @@ public class Client : EventEmitter
             }
         };
 
-        await SendAsync(payload.ToJson());
+        await this.SendAsync(payload.ToJson());
     }
 
-    private async void ResumeAsync(string sessionId)
+    public async void ResumeAsync(string sessionId)
     {
-        if (string.IsNullOrWhiteSpace(Token) || !_lastSequence.HasValue) return;
+        if (string.IsNullOrWhiteSpace(Token) || !LastSequence.HasValue) return;
 
         var payload = new ResumeEvent
         {
@@ -94,122 +70,14 @@ public class Client : EventEmitter
             {
                 Token = Token,
                 SessionId = sessionId,
-                Seq = _lastSequence.Value
+                Seq = LastSequence.Value
             }
         };
 
-        await SendAsync(payload.ToJson());
+        await this.SendAsync(payload.ToJson());
     }
 
-    private async Task SendAsync(string data)
-    {
-        if (_webSocket?.State == WebSocketState.Open)
-        {
-            var buffer = new ArraySegment<byte>(Encoding.UTF8.GetBytes(data));
-            await _webSocket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
-            Console.WriteLine($"Sent message: {data}");
-        }
-    }
-
-    private async Task ReceiveAndHandleMessagesAsync(string token)
-    {
-        try
-        {
-            while (_webSocket is { State: WebSocketState.Open })
-            {
-                var buffer = new ArraySegment<byte>(new byte[4096]);
-                var result = await _webSocket.ReceiveAsync(buffer, CancellationToken.None);
-
-                if (result.MessageType != WebSocketMessageType.Text) continue;
-                if (buffer.Array == null) continue;
-
-                var message = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
-                Console.WriteLine($"Received message: {message}");
-
-                var websocketMessage = JsonConvert.DeserializeObject<WebsocketMessageDto>(message);
-                if (websocketMessage is null)
-                {
-                    throw new Exception("InvalidWebhookMessage");
-                }
-
-                switch (websocketMessage.OpCode)
-                {
-                    case OpCode.Dispatch:
-                    {
-                        if (websocketMessage.SequenceNumber.HasValue)
-                        {
-                            _lastSequence = websocketMessage.SequenceNumber;
-                        }
-
-                        HandleDispatchEvent(websocketMessage);
-                        break;
-                    }
-
-                    case OpCode.Heartbeat:
-                    {
-                        await SendHeartbeatAsync();
-                        break;
-                    }
-
-                    case OpCode.Reconnect:
-                        JsonConvert.DeserializeObject<ReconnectEvent>(message);
-                        break;
-
-                    case OpCode.InvalidSession:
-                        var invalidSession = JsonConvert.DeserializeObject<InvalidSessionEvent>(message);
-                        if (invalidSession?.Data != null)
-                        {
-                            if (invalidSession.Data.Value && !string.IsNullOrWhiteSpace(_sessionId))
-                            {
-                                ResumeAsync(_sessionId);
-                            }
-                        }
-
-                        break;
-
-                    case OpCode.Hello:
-                    {
-                        var helloEvent = JsonConvert.DeserializeObject<HelloEvent>(message);
-                        if (helloEvent?.Data != null)
-                        {
-                            _heartbeatInterval = helloEvent.Data.HeartbeatInterval;
-                        }
-
-                        StartHeartbeatAsync();
-                        break;
-                    }
-
-                    case OpCode.HeartbeatAck when _firstAck:
-                    {
-                        _firstAck = false;
-                        var payload = new IdentifyEvent
-                        {
-                            Data = new IdentifyData
-                            {
-                                Token = token
-                            }
-                        };
-
-                        await SendAsync(payload.ToJson());
-                        break;
-                    }
-                }
-            }
-
-            if (_webSocket?.State != WebSocketState.Open)
-            {
-                HandleCloseStatus(_webSocket?.CloseStatus);
-                await ConnectAsync(token);
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"WebSocket receive error: {ex}");
-            throw;
-        }
-    }
-
-    private async void StartHeartbeatAsync()
+    public async void StartHeartbeatAsync()
     {
         _heartbeatCancellationTokenSource = new CancellationTokenSource();
 
@@ -219,39 +87,39 @@ public class Client : EventEmitter
 
             var rand = new Random();
             var jitter = rand.NextDouble();
-            var interval = (int)Math.Round(_heartbeatInterval * jitter);
+            var interval = (int)Math.Round(HeartbeatInterval * jitter);
 
             await Task.Delay(interval);
         }
     }
 
-    private async Task SendHeartbeatAsync()
+    internal async Task SendHeartbeatAsync()
     {
         var heartbeatPayload = new HeartbeatEvent();
 
-        if (_lastSequence.HasValue)
+        if (LastSequence.HasValue)
         {
-            heartbeatPayload.Data = _lastSequence.Value;
+            heartbeatPayload.Data = LastSequence.Value;
         }
 
-        await SendAsync(heartbeatPayload.ToJson());
+        await this.SendAsync(heartbeatPayload.ToJson());
     }
 
     public void Disconnect()
     {
         _heartbeatCancellationTokenSource?.Cancel();
-        _webSocket?.Abort();
+        WebSocket?.Abort();
     }
 
     private async void ReconnectAsync()
     {
-        _webSocket = new ClientWebSocket();
+        WebSocket = new ClientWebSocket();
         var gatewayUri = new Uri(Endpoints.WebsocketUrl);
 
-        await _webSocket.ConnectAsync(gatewayUri, CancellationToken.None);
+        await WebSocket.ConnectAsync(gatewayUri, CancellationToken.None);
     }
 
-    private void HandleCloseStatus(WebSocketCloseStatus? closeStatus)
+    internal void HandleCloseStatus(WebSocketCloseStatus? closeStatus)
     {
         var errorCode = ErrorCodeHelper.GetErrorCodeDetails(closeStatus);
 
@@ -271,7 +139,7 @@ public class Client : EventEmitter
         }
     }
 
-    private void HandleDispatchEvent(WebsocketMessageDto websocketMessage)
+    internal void HandleDispatchEvent(WebsocketMessageDto websocketMessage)
     {
         if (websocketMessage.Data == null) return;
         var jObj = websocketMessage.Data as JObject ?? JObject.FromObject(websocketMessage.Data);
@@ -284,9 +152,16 @@ public class Client : EventEmitter
                 if (eventObject == null) return;
 
                 User = eventObject.User;
-                _sessionId = eventObject.SessionId;
+                SessionId = eventObject.SessionId;
 
-                EmitReadyEvent(EventArgs.Empty);
+                EmitReadyEvent(
+                    new ClientEventArgs<ReadyEvent>
+                    {
+                        Event = eventObject,
+                        Client = this
+                    }
+                );
+
                 break;
             }
 
@@ -298,7 +173,8 @@ public class Client : EventEmitter
                 EmitApplicationCommandPermissionsUpdateEvent(
                     new ClientEventArgs<GuildApplicationCommandPermissionsUpdateEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -313,7 +189,8 @@ public class Client : EventEmitter
                 EmitAutoModerationRuleCreateEvent(
                     new ClientEventArgs<AutoModerationRuleEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -328,7 +205,8 @@ public class Client : EventEmitter
                 EmitAutoModerationRuleUpdateEvent(
                     new ClientEventArgs<AutoModerationRuleEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -343,7 +221,8 @@ public class Client : EventEmitter
                 EmitAutoModerationRuleDeleteEvent(
                     new ClientEventArgs<AutoModerationRuleEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -358,7 +237,8 @@ public class Client : EventEmitter
                 EmitAutoModerationActionExecutionEvent(
                     new ClientEventArgs<AutoModerationActionExecutionEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -380,7 +260,8 @@ public class Client : EventEmitter
                 EmitChannelCreateEvent(
                     new ClientEventArgs<ChannelEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -402,7 +283,8 @@ public class Client : EventEmitter
                 EmitChannelUpdateEvent(
                     new ClientEventArgs<ChannelEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -424,7 +306,8 @@ public class Client : EventEmitter
                 EmitChannelDeleteEvent(
                     new ClientEventArgs<ChannelEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -439,7 +322,8 @@ public class Client : EventEmitter
                 EmitChannelPinsUpdateEvent(
                     new ClientEventArgs<ChannelPinsUpdateEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -461,7 +345,8 @@ public class Client : EventEmitter
                 EmitThreadCreateEvent(
                     new ClientEventArgs<ThreadEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -483,7 +368,8 @@ public class Client : EventEmitter
                 EmitThreadUpdateEvent(
                     new ClientEventArgs<ThreadEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -505,7 +391,8 @@ public class Client : EventEmitter
                 EmitThreadDeleteEvent(
                     new ClientEventArgs<ThreadEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -523,7 +410,8 @@ public class Client : EventEmitter
                 EmitThreadListSyncEvent(
                     new ClientEventArgs<ThreadListSyncEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -539,7 +427,8 @@ public class Client : EventEmitter
                 EmitThreadMemberUpdateEvent(
                     new ClientEventArgs<ThreadMemberUpdateEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -555,7 +444,8 @@ public class Client : EventEmitter
                 EmitThreadMembersUpdateEvent(
                     new ClientEventArgs<ThreadMembersUpdateEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -571,7 +461,8 @@ public class Client : EventEmitter
                 EmitEntitlementCreateEvent(
                     new ClientEventArgs<EntitlementEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -587,7 +478,8 @@ public class Client : EventEmitter
                 EmitEntitlementUpdateEvent(
                     new ClientEventArgs<EntitlementEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -603,7 +495,8 @@ public class Client : EventEmitter
                 EmitEntitlementDeleteEvent(
                     new ClientEventArgs<EntitlementEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -617,30 +510,31 @@ public class Client : EventEmitter
 
                 Guilds[eventObject.Id] = eventObject;
 
-                if (eventObject.InternalMembers != null)
+                if (eventObject._members != null)
                 {
-                    Array.ForEach(eventObject.InternalMembers, member =>
+                    Array.ForEach(eventObject._members, member =>
                     {
                         Users[member.User.Id] = member.User;
                         Guilds[eventObject.Id].Members[member.User.Id] = member;
                     });
                 }
 
-                if (eventObject.InternalChannels != null)
+                if (eventObject._channels != null)
                 {
-                    Array.ForEach(eventObject.InternalChannels, channel =>
+                    Array.ForEach(eventObject._channels, channel =>
                     {
                         Channels[channel.Id] = channel;
                         Guilds[eventObject.Id].Channels[channel.Id] = channel;
                     });
                 }
 
-                Array.ForEach(eventObject.InternalRoles, role => { Guilds[eventObject.Id].Roles[role.Id] = role; });
+                Array.ForEach(eventObject._roles, role => { Guilds[eventObject.Id].Roles[role.Id] = role; });
 
                 EmitGuildCreateEvent(
                     new ClientEventArgs<GuildCreateEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -657,7 +551,8 @@ public class Client : EventEmitter
                 EmitGuildUpdateEvent(
                     new ClientEventArgs<GuildEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 
@@ -680,7 +575,8 @@ public class Client : EventEmitter
                 EmitGuildDeleteEvent(
                     new ClientEventArgs<GuildEvent>
                     {
-                        Event = eventObject
+                        Event = eventObject,
+                        Client = this
                     }
                 );
 

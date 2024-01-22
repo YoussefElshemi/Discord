@@ -4,7 +4,7 @@ namespace Discord.Models;
 
 public class EventEmitter
 {
-    public event EventHandler? OnReady;
+    public event EventHandler<ClientEventArgs<ReadyEvent>>? OnReady;
     public event EventHandler<ClientEventArgs<GuildApplicationCommandPermissionsUpdateEvent>>? OnApplicationCommandPermissionsUpdate;
     public event EventHandler<ClientEventArgs<AutoModerationRuleEvent>>? OnAutoModerationRuleCreate;
     public event EventHandler<ClientEventArgs<AutoModerationRuleEvent>>? OnAutoModerationRuleUpdate;
@@ -27,7 +27,7 @@ public class EventEmitter
     public event EventHandler<ClientEventArgs<GuildEvent>>? OnGuildUpdate;
     public event EventHandler<ClientEventArgs<GuildEvent>>? OnGuildDelete;
 
-    protected void EmitReadyEvent(EventArgs e)
+    protected void EmitReadyEvent(ClientEventArgs<ReadyEvent> e)
     {
         OnReady?.Invoke(this, e);
     }
